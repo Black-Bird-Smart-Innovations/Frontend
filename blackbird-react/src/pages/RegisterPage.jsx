@@ -47,11 +47,7 @@ export default function RegisterPage() {
     try {
       const result = await signInWithGoogle();
       if (result?.user) {
-        try {
-          await syncBackend(result.user);
-        } catch (backendErr) {
-          console.error('Backend sync failed (non-blocking):', backendErr);
-        }
+        await syncBackend(result.user, { throwOnError: true });
         navigate('/');
       }
       // If null, redirect is happening — page will reload

@@ -6,7 +6,7 @@ import ThemeToggle from '../ui/ThemeToggle';
 export default function Navbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, backendUser, logout } = useAuth();
   const isHome = pathname === '/';
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -48,6 +48,20 @@ export default function Navbar() {
     }
     return email ? email[0].toUpperCase() : '?';
   };
+
+  const isDefaultProfilePhoto = (url) => {
+    if (!url) return true;
+    const normalized = url.toLowerCase();
+    return normalized.includes('/default_images/')
+      || normalized.includes('customer.jpg')
+      || normalized.includes('user-profile.png')
+      || normalized.includes('profileplaceholder');
+  };
+
+  const backendPhoto = backendUser?.profile_picture;
+  const avatarUrl = backendPhoto && !isDefaultProfilePhoto(backendPhoto)
+    ? backendPhoto
+    : user?.photoURL;
 
   return (
     <nav className="nav" id="nav">
@@ -101,8 +115,8 @@ export default function Navbar() {
                 aria-haspopup="true"
               >
                 <span className="user-avatar">
-                  {user.photoURL ? (
-                    <img src={user.photoURL} alt="" className="user-avatar-img" referrerPolicy="no-referrer" />
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="" className="user-avatar-img" referrerPolicy="no-referrer" />
                   ) : (
                     <span className="user-avatar-initials">{getInitials(user.displayName, user.email)}</span>
                   )}

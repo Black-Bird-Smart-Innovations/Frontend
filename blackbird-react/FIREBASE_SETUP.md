@@ -34,7 +34,17 @@ VITE_FIREBASE_APP_ID=your-app-id
 
 Replace each value with the corresponding value from your Firebase config (step 2).
 
-## 5. Verify
+## 5. Backend Account Sync
+
+The website syncs Firebase users to BlackBird through:
+
+```text
+POST /api/auth/oauth/firebase
+```
+
+Set `VITE_BACKEND_URL` to the Laravel backend host. The OAuth sync route verifies the Firebase ID token server-side and does not require the old mobile app `KEY` header.
+
+## 6. Verify
 
 1. Run `npm run dev`
 2. Navigate to `/register` and create a test account

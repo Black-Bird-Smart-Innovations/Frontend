@@ -2,19 +2,17 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth, checkRedirectResult } from '../firebase';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://web.blackbirdtech.app';
-const API_KEY = 'BlackBird@123*';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://blackbird-backend-hfrticvala-ue.a.run.app';
 
 const AuthContext = createContext();
 
 async function syncWithBackend(firebaseUser) {
   const idToken = await firebaseUser.getIdToken();
-  const res = await fetch(`${BACKEND_URL}/api/auth/firebase`, {
+  const res = await fetch(`${BACKEND_URL}/api/auth/oauth/firebase`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'x-api-key': API_KEY,
     },
     body: JSON.stringify({ firebase_token: idToken }),
   });
@@ -35,12 +33,12 @@ export function AuthProvider({ children }) {
   const [backendLoading, setBackendLoading] = useState(false);
   const [backendError, setBackendError] = useState(null);
 
-  const syncBackend = useCallback(async (firebaseUser) => {
+  const syncBackend = useCallback(async (firebaseUser, options = {}) => {
     if (!firebaseUser) {
       setBackendUser(null);
       setBackendToken(null);
       localStorage.removeItem('bb_token');
-      return;
+      return null;
     }
 
     setBackendLoading(true);
@@ -50,9 +48,14 @@ export function AuthProvider({ children }) {
       setBackendUser(data.data);
       setBackendToken(data.bearer_token);
       localStorage.setItem('bb_token', data.bearer_token);
+      return data;
     } catch (err) {
       console.error('Backend sync error:', err);
       setBackendError(err.message);
+      if (options.throwOnError) {
+        throw err;
+      }
+      return null;
     } finally {
       setBackendLoading(false);
     }
