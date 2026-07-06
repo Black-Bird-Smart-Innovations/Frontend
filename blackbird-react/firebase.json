@@ -6,6 +6,13 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "redirects": [
+      {
+        "regex": "/([A-Za-z0-9]{3})$",
+        "destination": "https://blackbird-backend-hfrticvala-ue.a.run.app/nfc/access/:1",
+        "type": 302
+      }
+    ],
     "rewrites": [
       {
         "source": "**",
