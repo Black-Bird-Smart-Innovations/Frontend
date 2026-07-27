@@ -21,6 +21,24 @@
     ],
     "headers": [
       {
+        "source": "/",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/{about,privacy,terms,profile,products,products/**,cart,orders,orders/**,addresses,notifications,login,register,forgot-password,index.html}",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
         "source": "/assets/**",
         "headers": [
           {

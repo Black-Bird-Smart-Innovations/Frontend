@@ -32,7 +32,7 @@ export default function RegisterPage() {
     try {
       const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
       await updateProfile(user, { displayName: `${form.firstName} ${form.lastName}` });
-      await syncBackend(user);
+      await syncBackend(user, { throwOnError: true });
       navigate('/');
     } catch (err) {
       setError(err.code ? getErrorMessage(err.code) : err.message);
@@ -173,10 +173,6 @@ export default function RegisterPage() {
                   <path d="M18.1713 8.36796H17.5V8.33337H10V11.6667H14.6096C14.2721 12.5902 13.6596 13.3972 12.8667 13.9879L12.8683 13.987L15.4475 16.1695C15.2625 16.3354 18.3333 14.1667 18.3333 10C18.3333 9.44129 18.2758 8.89587 18.1713 8.36796Z" fill="#1976D2"/>
                 </svg>
                 <span>Google</span>
-              </button>
-              <button type="button" className="social-btn">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 1.66663H12.5C11.395 1.66663 10.3352 2.10561 9.55376 2.88701C8.77236 3.66842 8.33337 4.72822 8.33337 5.83329V8.33329H5.83337V11.6666H8.33337V18.3333H11.6667V11.6666H14.1667L15 8.33329H11.6667V5.83329C11.6667 5.61228 11.7545 5.40032 11.9108 5.24404C12.0671 5.08776 12.279 4.99996 12.5 4.99996H15V1.66663Z" fill="#1877F2"/></svg>
-                <span>Facebook</span>
               </button>
             </div>
           </div>

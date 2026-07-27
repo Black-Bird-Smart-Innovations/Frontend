@@ -77,7 +77,7 @@ export default function PricingSection() {
             </div>
           </div>
 
-          <a href="#contact" className="btn btn-primary btn-large pricing-cta">
+          <a href="mailto:blackbird_tech@yahoo.com?subject=Black%20Bird%20product%20quote" className="btn btn-primary btn-large pricing-cta">
             <span>Get a Quote</span>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -20,7 +21,7 @@ export default function NotificationsPage() {
       .then(res => setNotifications(res.data || []))
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [backendToken]);
+  }, [backendToken, backendLoading]);
 
   if (authLoading) return null;
   if (!user) return <Navigate to="/login" replace />;

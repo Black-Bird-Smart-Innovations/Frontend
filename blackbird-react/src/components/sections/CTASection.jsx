@@ -9,7 +9,7 @@ export default function CTASection() {
           </p>
           <div className="cta-buttons">
             <a href="#pricing" className="btn btn-primary btn-large">Get Started Today</a>
-            <a href="tel:917-977-0949" className="btn btn-secondary btn-large">
+            <a href="tel:+19179770949" className="btn btn-secondary btn-large">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path d="M3 4.5C3 3.67157 3.67157 3 4.5 3H7.37163C7.73999 3 8.06662 3.23053 8.18994 3.57655L9.28324 6.85607C9.42225 7.24584 9.26178 7.68036 8.89897 7.8842L7.17899 8.85034C8.08984 10.8541 9.64593 12.4102 11.6497 13.321L12.6158 11.601C12.8196 11.2382 13.2542 11.0778 13.6439 11.2168L16.9234 12.3101C17.2695 12.4334 17.5 12.76 17.5 13.1284V16C17.5 16.8284 16.8284 17.5 16 17.5H15C8.37258 17.5 3 12.1274 3 5.5V4.5Z" stroke="currentColor" strokeWidth="1.5" />
               </svg>
@@ -26,13 +26,13 @@ export default function CTASection() {
                 <span className="store-title">App Store</span>
               </div>
             </a>
-            <a href="https://play.google.com/store/apps/details?id=com.blackbirdsmartband&hl=en_US" target="_blank" rel="noopener noreferrer" className="app-store-btn">
+            <a href="https://storage.googleapis.com/blackbird-website-prod-media/releases/android/blackbird-2.1-20.apk" target="_blank" rel="noopener noreferrer" className="app-store-btn">
               <svg viewBox="0 0 24 24" fill="currentColor" className="store-icon">
-                <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                <path d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17V3ZM5 19h14v2H5v-2Z" />
               </svg>
               <div className="store-text">
-                <span className="store-subtitle">Get it on</span>
-                <span className="store-title">Google Play</span>
+                <span className="store-subtitle">Download the</span>
+                <span className="store-title">Android app</span>
               </div>
             </a>
           </div>
