@@ -35,6 +35,8 @@ export default function Footer() {
             <div className="footer-column">
               <h4 className="footer-heading">Product</h4>
               <Link to="/#features" className="footer-link">Features</Link>
+              <Link to="/#new-features" className="footer-link">What's New</Link>
+              <Link to="/products" className="footer-link">Shop</Link>
               <Link to="/#products" className="footer-link">Products</Link>
               <Link to="/#pricing" className="footer-link">Pricing</Link>
               <Link to="/#how-it-works" className="footer-link">How It Works</Link>
@@ -51,7 +53,6 @@ export default function Footer() {
               <Link to="/privacy" className="footer-link">Privacy Policy</Link>
               <Link to="/terms" className="footer-link">Terms of Service</Link>
               <Link to="/terms" className="footer-link">EULA</Link>
-              <Link to="/privacy" className="footer-link">HIPAA Notice</Link>
             </div>
           </div>
         </div>

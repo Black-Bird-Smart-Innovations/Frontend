@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { updateProfile } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../lib/api';
+import { loginPath } from '../lib/shop';
 
 const collectionToArray = (value) => {
   if (Array.isArray(value)) return value;
@@ -144,7 +145,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate(loginPath('/profile'));
     }
   }, [navigate, user]);
 
@@ -714,7 +715,7 @@ export default function ProfilePage() {
               <div>
                   <p className="profile-eyebrow">Protective Profile</p>
                   <h2 className="profile-panel-title">Responder-ready details</h2>
-                  <p className="profile-section-subtitle">Medical, emergency, and family details used by BlackBird responders.</p>
+                  <p className="profile-section-subtitle">Medical, emergency, and family details for your Medical ID and Care Team.</p>
               </div>
               <button
                 className="btn btn-outline btn-sm"

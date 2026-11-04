@@ -1,18 +1,27 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, signInWithGoogle } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import AmbientBackground from '../components/layout/AmbientBackground';
+import { loginPath, safeNextPath } from '../lib/shop';
 import '../css/auth.css';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const { syncBackend } = useAuth();
+  const [searchParams] = useSearchParams();
+  // Where to go after signing in (for example back to the cart). Same-site paths only.
+  const next = safeNextPath(searchParams.get('next'));
+  const { user, loading: authLoading, syncBackend } = useAuth();
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Back from Google's sign-in page: continue to where the person was going.
+  useEffect(() => {
+    if (!authLoading && user && !loading && !error) navigate(next, { replace: true });
+  }, [authLoading, user, loading, error, next, navigate]);
 
   const getErrorMessage = (code) => {
     switch (code) {
@@ -33,7 +42,7 @@ export default function RegisterPage() {
       const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
       await updateProfile(user, { displayName: `${form.firstName} ${form.lastName}` });
       await syncBackend(user, { throwOnError: true });
-      navigate('/');
+      navigate(next, { replace: true });
     } catch (err) {
       setError(err.code ? getErrorMessage(err.code) : err.message);
     } finally {
@@ -48,7 +57,7 @@ export default function RegisterPage() {
       const result = await signInWithGoogle();
       if (result?.user) {
         await syncBackend(result.user, { throwOnError: true });
-        navigate('/');
+        navigate(next, { replace: true });
       }
       // If null, redirect is happening — page will reload
     } catch (err) {
@@ -93,7 +102,7 @@ export default function RegisterPage() {
           <div className="auth-form-container">
             <div className="auth-header">
               <h2 className="auth-title">Create your account</h2>
-              <p className="auth-subtitle">Already have an account? <Link to="/login" className="auth-link">Sign in</Link></p>
+              <p className="auth-subtitle">Already have an account? <Link to={loginPath(next)} className="auth-link">Sign in</Link></p>
             </div>
 
             {error && <div style={{ background: 'rgba(236,28,36,0.1)', border: '1px solid rgba(236,28,36,0.3)', borderRadius: '0.75rem', padding: '0.75rem 1rem', marginBottom: '1rem', color: 'var(--color-primary)', fontSize: '0.875rem' }}>{error}</div>}

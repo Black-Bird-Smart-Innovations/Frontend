@@ -38,8 +38,9 @@ export default function MobileMenu() {
             <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="2"/>
             <path d="M13.5 13.5L17 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
           </svg>
-          Search Products
+          Shop
         </Link>
+        {!user && <Link to="/cart" className="mobile-link" onClick={closeMenu}>Cart</Link>}
 
         {user && (
           <div className="mobile-account-grid">

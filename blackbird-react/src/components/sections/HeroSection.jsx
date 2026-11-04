@@ -3,10 +3,10 @@ export default function HeroSection() {
     <section className="hero">
       <div className="hero-content">
         <div className="hero-text">
-          <div className="hero-badge">
+          <a href="#new-features" className="hero-badge hero-badge-link">
             <span className="pulse-dot"></span>
-            <span>24/7 Protection &amp; Peace of Mind</span>
-          </div>
+            <span>New in Black Bird: see what's coming</span>
+          </a>
           <h1 className="hero-title">
             Safety that watches over{' '}
             <span className="gradient-text">your loved ones</span>
@@ -33,18 +33,18 @@ export default function HeroSection() {
           </div>
           <div className="hero-stats">
             <div className="stat">
-              <span className="stat-number">10K+</span>
-              <span className="stat-label">Protected Lives</span>
+              <span className="stat-number">1 tap</span>
+              <span className="stat-label">SOS alerts your Care Team</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat">
-              <span className="stat-number">24/7</span>
-              <span className="stat-label">Emergency Support</span>
+              <span className="stat-number">Falls</span>
+              <span className="stat-label">Alerts sent automatically</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat">
-              <span className="stat-number">8+</span>
-              <span className="stat-label">Languages</span>
+              <span className="stat-number">47</span>
+              <span className="stat-label">Languages in the next update</span>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default function HeroSection() {
               </div>
               <div className="card-text">
                 <span className="card-title">SOS Activated</span>
-                <span className="card-subtitle">Help is on the way</span>
+                <span className="card-subtitle">Care Team alerted</span>
               </div>
             </div>
             <div className="floating-card card-location">

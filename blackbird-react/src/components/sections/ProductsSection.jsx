@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import { quoteMailto } from '../../data/collection';
+
 export default function ProductsSection() {
   return (
     <section className="products-section" id="products">
@@ -26,7 +29,7 @@ export default function ProductsSection() {
               <div className="product-price">
                 <span className="price-amount">Get a quote</span>
               </div>
-              <a href="#pricing" className="btn btn-primary product-btn">Learn More</a>
+              <Link to="/products/watches" className="btn btn-primary product-btn">See details</Link>
             </div>
           </div>
 
@@ -49,7 +52,7 @@ export default function ProductsSection() {
               <div className="product-price">
                 <span className="price-amount">Get a quote</span>
               </div>
-              <a href="#pricing" className="btn btn-primary product-btn">Learn More</a>
+              <Link to="/products/pendant" className="btn btn-primary product-btn">See details</Link>
             </div>
           </div>
 
@@ -68,26 +71,26 @@ export default function ProductsSection() {
               <div className="product-price">
                 <span className="price-amount">Get a quote</span>
               </div>
-              <a href="#pricing" className="btn btn-primary product-btn">Learn More</a>
+              <a href={quoteMailto('QR Code Medical ID Sleeve')} className="btn btn-primary product-btn">Email us for a quote</a>
             </div>
           </div>
 
           <div className="product-card">
             <div className="product-image-wrapper">
-              <img src="/images/Button.PNG" alt="Black Bird SOS Button" className="product-image" />
+              <img src="/images/Button.PNG" alt="Black Bird Protective Button" className="product-image" />
             </div>
             <div className="product-info">
-              <h3 className="product-name">Black Bird SOS Button</h3>
-              <p className="product-subtitle">One-Touch Emergency</p>
+              <h3 className="product-name">Black Bird Protective Button</h3>
+              <p className="product-subtitle">Emergency info, close at hand</p>
               <div className="product-features">
-                <span className="product-feature">SOS Alert</span>
+                <span className="product-feature">Tap or Scan for Medical ID</span>
                 <span className="product-feature">Discreet Design</span>
                 <span className="product-feature">Clip-On</span>
               </div>
               <div className="product-price">
                 <span className="price-amount">Get a quote</span>
               </div>
-              <a href="#pricing" className="btn btn-primary product-btn">Learn More</a>
+              <Link to="/products/buttons" className="btn btn-primary product-btn">See details</Link>
             </div>
           </div>
 
@@ -108,7 +111,7 @@ export default function ProductsSection() {
               <div className="product-price">
                 <span className="price-amount">Coming Soon</span>
               </div>
-              <a href="#pricing" className="btn btn-primary product-btn">Learn More</a>
+              <Link to="/products/more" className="btn btn-primary product-btn">Join the waitlist</Link>
             </div>
           </div>
 
@@ -127,7 +130,7 @@ export default function ProductsSection() {
               <div className="product-price">
                 <span className="price-amount">$29.99</span>
               </div>
-              <a href="#pricing" className="btn btn-primary product-btn">Learn More</a>
+              <Link to="/products/stuffies" className="btn btn-primary product-btn">Join the waitlist</Link>
             </div>
           </div>
         </div>

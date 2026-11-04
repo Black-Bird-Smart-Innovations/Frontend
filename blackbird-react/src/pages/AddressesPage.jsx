@@ -1,12 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../lib/api';
+import { loginPath, safeNextPath } from '../lib/shop';
 import '../css/shop.css';
 
 const EMPTY_FORM = { name: '', type: 'home', phone: '', country: '', city: '', state: '', street: '', zipcode: '', flat_no: '', address_name: '' };
 
 export default function AddressesPage() {
+  const { pathname, search } = useLocation();
+  const [searchParams] = useSearchParams();
+  // Came here from checkout: offer a way straight back to the cart.
+  const returnTo = safeNextPath(searchParams.get('next'), '');
   const { user, backendToken, backendLoading, loading: authLoading } = useAuth();
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +42,7 @@ export default function AddressesPage() {
   }, [backendToken, backendLoading, fetchAddresses]);
 
   if (authLoading) return null;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to={loginPath(pathname + search)} replace />;
 
   const openAdd = () => {
     setEditingId(null);
@@ -115,6 +120,7 @@ export default function AddressesPage() {
           <div>
             <h1 className="shop-title">My Addresses</h1>
             <p className="shop-subtitle">Manage your delivery addresses</p>
+            {returnTo === '/cart' && <Link to="/cart" className="btn btn-outline btn-sm" style={{ marginTop: 'var(--space-sm)' }}>Back to your cart</Link>}
           </div>
           <button className="btn btn-primary btn-sm" onClick={openAdd}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>

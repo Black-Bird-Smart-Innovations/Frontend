@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../lib/api';
+import { loginPath } from '../lib/shop';
 import '../css/shop.css';
 
 const TABS = [
@@ -22,6 +23,7 @@ const STATUS_MAP = {
 };
 
 export default function OrdersPage() {
+  const { pathname } = useLocation();
   const { user, backendToken, backendLoading, loading: authLoading } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,7 @@ export default function OrdersPage() {
   }, [backendToken, backendLoading, activeTab]);
 
   if (authLoading) return null;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to={loginPath(pathname)} replace />;
 
   const getImage = (order) => order.product?.images?.[0]?.image_url || '/images/placeholder.png';
 

@@ -5,7 +5,7 @@ export default function CTASection() {
         <div className="cta-content">
           <h2 className="cta-title">Ready to protect your loved ones?</h2>
           <p className="cta-description">
-            Join thousands of families who trust Black Bird Smart Innovations for peace of mind.
+            Questions? Call or email us and we'll help you choose the right setup.
           </p>
           <div className="cta-buttons">
             <a href="#pricing" className="btn btn-primary btn-large">Get Started Today</a>

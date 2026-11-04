@@ -2,6 +2,7 @@ import HeroSection from '../components/sections/HeroSection';
 import TrustedSection from '../components/sections/TrustedSection';
 import VideoSection from '../components/sections/VideoSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
+import NewFeaturesSection from '../components/sections/NewFeaturesSection';
 import EmergencySection from '../components/sections/EmergencySection';
 import ProductsSection from '../components/sections/ProductsSection';
 import HowItWorksSection from '../components/sections/HowItWorksSection';
@@ -15,6 +16,7 @@ export default function HomePage() {
       <TrustedSection />
       <VideoSection />
       <FeaturesSection />
+      <NewFeaturesSection />
       <EmergencySection />
       <ProductsSection />
       <HowItWorksSection />

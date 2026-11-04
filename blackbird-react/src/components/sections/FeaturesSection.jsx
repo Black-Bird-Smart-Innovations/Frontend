@@ -25,8 +25,8 @@ export default function FeaturesSection() {
             </div>
             <h3 className="feature-title">Real-Time GPS Tracking</h3>
             <p className="feature-description">
-              Know exactly where your loved one is at any moment.
-              Set safe zones and receive instant alerts when boundaries are crossed.
+              See where your loved one is on a map.
+              Set safe zones and get an alert when they leave one.
               Location history keeps you informed even when you can't be there.
             </p>
             <div className="feature-visual gps-visual">
@@ -48,7 +48,7 @@ export default function FeaturesSection() {
             </div>
             <h3 className="feature-title">Health Monitoring</h3>
             <p className="feature-description">
-              Track body temperature, set medication reminders, and monitor vital signs in real-time.
+              See temperature and other readings from the band, and set medicine reminders.
             </p>
           </div>
 
@@ -78,9 +78,10 @@ export default function FeaturesSection() {
                 </svg>
               </div>
             </div>
-            <h3 className="feature-title">8+ Languages</h3>
+            <h3 className="feature-title">47 Languages</h3>
             <p className="feature-description">
-              Full support for English, Spanish, Mandarin, Russian, Hebrew, Arabic, French, and more.
+              English, Spanish, Chinese, Russian, Hebrew, Arabic, Haitian Creole, Korean and many more.
+              Coming to iPhone and Android in the next app update.
             </p>
           </div>
         </div>
