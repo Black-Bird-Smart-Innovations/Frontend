@@ -149,7 +149,7 @@ export default function NewFeaturesSection() {
         <div className="nf-note" role="note">
           <strong>Good to know</strong>
           <p>
-            Black Bird alerts the people you choose. It is not a monitoring center and it does not call 911 for you.
+            Black Bird alerts the people you choose. It does not call 911 for you. In a life-threatening emergency, call 911 yourself.
             In a life-threatening emergency, call 911. The app has a one-tap Call 911 button.
           </p>
         </div>

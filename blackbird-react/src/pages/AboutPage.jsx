@@ -74,7 +74,7 @@ export default function AboutPage() {
             <div className="value-card">
               <div className="value-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="15" stroke="currentColor" strokeWidth="2"/><path d="M12 20L18 26L28 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
               <h3 className="value-title">Reliability</h3>
-              <p className="value-description">We say plainly what Black Bird does and doesn't do. Black Bird alerts the people you choose; it is not a monitoring center. In a life-threatening emergency, always call 911.</p>
+              <p className="value-description">We say plainly what Black Bird does and doesn't do. Black Bird alerts the people you choose. In a life-threatening emergency, always call 911 yourself.</p>
             </div>
           </div>
         </div>

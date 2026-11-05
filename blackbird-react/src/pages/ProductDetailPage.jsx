@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../lib/api';
+import { sanitizeProductHtml } from '../lib/productHtml';
 import { addToGuestCart, fetchStoreProduct, loginPath } from '../lib/shop';
 import { findCollectionItem, quoteMailto, SHOP_PHONE } from '../data/collection';
 import WaitlistForm from '../components/shop/WaitlistForm';
@@ -93,13 +94,17 @@ function StoreProductDetail({ id }) {
       .then((data) => {
         if (cancelled) return;
         setProduct(data);
-        if (data?.colors?.length) setSelectedColor(data.colors[0]);
+        setActiveImage(0);
+        setSelectedColor(data?.colors?.[0] || null);
+        setQuantity(1);
+        setCartMessage(null);
       })
       .catch((err) => { if (!cancelled) setError(err.message || 'Could not load this product.'); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, [id, backendToken, waitingForAccount]);
 
+  const safeDescription = useMemo(() => sanitizeProductHtml(product?.description), [product?.description]);
   const images = product?.images || [];
   const getImageUrl = (img) => img?.image_url || img?.url || '';
 
@@ -285,7 +290,7 @@ function StoreProductDetail({ id }) {
         {product.description && (
           <div className="pd-full-desc">
             <h2>Description</h2>
-            <div dangerouslySetInnerHTML={{ __html: product.description }} />
+            <div dangerouslySetInnerHTML={{ __html: safeDescription }} />
           </div>
         )}
 

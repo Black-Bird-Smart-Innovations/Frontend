@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, signInWithGoogle } from '../firebase';
 import { useAuth } from '../context/AuthContext';
+import { apiFetch } from '../lib/api';
 import AmbientBackground from '../components/layout/AmbientBackground';
 import { loginPath, safeNextPath } from '../lib/shop';
 import '../css/auth.css';
@@ -26,7 +27,7 @@ export default function RegisterPage() {
   const getErrorMessage = (code) => {
     switch (code) {
       case 'auth/email-already-in-use': return 'An account with this email already exists.';
-      case 'auth/weak-password': return 'Password must be at least 6 characters.';
+      case 'auth/weak-password': return 'Password must be at least 8 characters.';
       case 'auth/invalid-email': return 'Please enter a valid email address.';
       default: return 'An error occurred. Please try again.';
     }
@@ -41,7 +42,12 @@ export default function RegisterPage() {
     try {
       const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
       await updateProfile(user, { displayName: `${form.firstName} ${form.lastName}` });
-      await syncBackend(user, { throwOnError: true });
+      const session = await syncBackend(user, { throwOnError: true });
+      await apiFetch('/v2/profile', {
+        method: 'PATCH',
+        token: session.bearer_token,
+        body: { phone: form.phone, full_name: `${form.firstName} ${form.lastName}`.trim() },
+      });
       navigate(next, { replace: true });
     } catch (err) {
       setError(err.code ? getErrorMessage(err.code) : err.message);
@@ -145,7 +151,7 @@ export default function RegisterPage() {
                 <label htmlFor="password" className="form-label">Password</label>
                 <div className="input-wrapper">
                   <svg className="input-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="4" y="8" width="12" height="10" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M7 8V5C7 3.34315 8.34315 2 10 2C11.6569 2 13 3.34315 13 5V8" stroke="currentColor" strokeWidth="1.5"/><circle cx="10" cy="13" r="1.5" fill="currentColor"/></svg>
-                  <input type={showPassword ? 'text' : 'password'} id="password" name="password" className="form-input" placeholder="Create a strong password" required value={form.password} onChange={handleChange} />
+                  <input type={showPassword ? 'text' : 'password'} id="password" name="password" className="form-input" placeholder="Create a strong password" minLength={8} required value={form.password} onChange={handleChange} />
                   <button type="button" className="password-toggle" aria-label="Toggle password visibility" onClick={() => setShowPassword(!showPassword)}>
                     {showPassword ? (
                       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3L17 17M10 4C4 4 1 10 1 10C1 10 2.5 12.5 5 14.5M10 16C16 16 19 10 19 10C19 10 17.5 7.5 15 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
