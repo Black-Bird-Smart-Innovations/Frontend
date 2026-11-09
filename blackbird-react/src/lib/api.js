@@ -47,7 +47,7 @@ async function request(path, { token, method = 'GET', body } = {}, hasRetried = 
   });
 
   if (res.status === 401 && token && unauthorizedHandler && !hasRetried) {
-    const refreshedToken = await unauthorizedHandler();
+    const refreshedToken = await unauthorizedHandler(token);
     if (refreshedToken) {
       return request(path, { token: refreshedToken, method, body }, true);
     }

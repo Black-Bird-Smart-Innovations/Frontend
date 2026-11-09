@@ -35,16 +35,22 @@ export function AuthProvider({ children }) {
   const [backendLoading, setBackendLoading] = useState(true);
   const [backendError, setBackendError] = useState(null);
   const syncPromiseRef = useRef(null);
+  const syncUserRef = useRef(null);
+  const sessionVersionRef = useRef(0);
   const syncedUserRef = useRef(null);
   const backendTokenRef = useRef(null);
   const backendUserRef = useRef(null);
 
   const clearBackendSession = useCallback(() => {
+    sessionVersionRef.current += 1;
+    syncPromiseRef.current = null;
+    syncUserRef.current = null;
     backendTokenRef.current = null;
     backendUserRef.current = null;
     syncedUserRef.current = null;
     setBackendUser(null);
     setBackendToken(null);
+    setBackendLoading(false);
     localStorage.removeItem('bb_token');
   }, []);
 
@@ -53,6 +59,14 @@ export function AuthProvider({ children }) {
       clearBackendSession();
       setBackendLoading(false);
       return null;
+    }
+
+    // An old screen's callback must not clear a different signed-in account.
+    if (auth.currentUser?.uid !== firebaseUser.uid) return null;
+
+    if ((syncUserRef.current && syncUserRef.current !== firebaseUser.uid)
+      || (syncedUserRef.current && syncedUserRef.current !== firebaseUser.uid)) {
+      clearBackendSession();
     }
 
     if (!options.force && syncedUserRef.current === firebaseUser.uid && backendTokenRef.current) {
@@ -66,8 +80,14 @@ export function AuthProvider({ children }) {
     setBackendError(null);
 
     if (!syncPromiseRef.current) {
-      syncPromiseRef.current = syncWithBackend(firebaseUser)
+      const sessionVersion = sessionVersionRef.current;
+      const isCurrentSession = () => sessionVersionRef.current === sessionVersion
+        && auth.currentUser?.uid === firebaseUser.uid;
+      syncUserRef.current = firebaseUser.uid;
+      const syncPromise = syncWithBackend(firebaseUser)
         .then((data) => {
+          // A response that arrives after sign-out must not restore the old account.
+          if (!isCurrentSession()) return null;
           backendUserRef.current = data.data;
           backendTokenRef.current = data.bearer_token;
           syncedUserRef.current = firebaseUser.uid;
@@ -77,15 +97,20 @@ export function AuthProvider({ children }) {
           return data;
         })
         .catch((err) => {
+          if (!isCurrentSession()) return null;
           console.error('Backend sync error:', err);
           clearBackendSession();
           setBackendError(err.message);
           throw err;
         })
         .finally(() => {
-          syncPromiseRef.current = null;
-          setBackendLoading(false);
+          if (syncPromiseRef.current === syncPromise) {
+            syncPromiseRef.current = null;
+            syncUserRef.current = null;
+            setBackendLoading(false);
+          }
         });
+      syncPromiseRef.current = syncPromise;
     }
 
     try {
@@ -98,13 +123,18 @@ export function AuthProvider({ children }) {
     }
   }, [clearBackendSession]);
 
-  useEffect(() => setUnauthorizedHandler(async () => {
-    if (!auth.currentUser) {
+  useEffect(() => setUnauthorizedHandler(async (failedToken) => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) {
       clearBackendSession();
       return null;
     }
 
-    const data = await syncBackend(auth.currentUser, { force: true, throwOnError: true });
+    // Firebase can change users before its auth-state listener clears our session.
+    if (failedToken !== backendTokenRef.current || syncedUserRef.current !== firebaseUser.uid) return null;
+    const sessionVersion = sessionVersionRef.current;
+    const data = await syncBackend(firebaseUser, { force: true, throwOnError: true });
+    if (sessionVersionRef.current !== sessionVersion || auth.currentUser?.uid !== firebaseUser.uid) return null;
     return data?.bearer_token || null;
   }), [clearBackendSession, syncBackend]);
 
