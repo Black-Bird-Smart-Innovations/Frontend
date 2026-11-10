@@ -107,8 +107,8 @@ const GROUPS = [
       },
       {
         icon: 'ping',
-        title: 'Nearby Ping',
-        text: 'Send a quick ping to Black Bird helpers within 5 ft of you who have turned on Nearby Ping. You see when someone has received it.',
+        title: 'Neighbor Alert',
+        text: 'Send a quick alert to Black Bird helpers within 5 ft of you who have turned on Nearby Helper. You see when someone has received it.',
       },
       {
         icon: 'globe',
