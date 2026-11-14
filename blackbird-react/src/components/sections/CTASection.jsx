@@ -26,6 +26,8 @@ export default function CTASection() {
                 <span className="store-title">App Store</span>
               </div>
             </a>
+            {/* No direct Android download: Google suspended the project over the public APK link (Nov 2026).
+                Add a Google Play button here once the app is listed. */}
           </div>
         </div>
       </div>
