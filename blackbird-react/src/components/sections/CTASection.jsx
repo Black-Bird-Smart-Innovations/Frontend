@@ -5,7 +5,7 @@ export default function CTASection() {
         <div className="cta-content">
           <h2 className="cta-title">Ready to protect your loved ones?</h2>
           <p className="cta-description">
-            Join thousands of families who trust Black Bird Smart Innovations for peace of mind.
+            Questions? Call or email us and we'll help you choose the right setup.
           </p>
           <div className="cta-buttons">
             <a href="#pricing" className="btn btn-primary btn-large">Get Started Today</a>
@@ -26,15 +26,8 @@ export default function CTASection() {
                 <span className="store-title">App Store</span>
               </div>
             </a>
-            <a href="https://storage.googleapis.com/blackbird-website-prod-media/releases/android/blackbird-2.1-20.apk" target="_blank" rel="noopener noreferrer" className="app-store-btn">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="store-icon">
-                <path d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17V3ZM5 19h14v2H5v-2Z" />
-              </svg>
-              <div className="store-text">
-                <span className="store-subtitle">Download the</span>
-                <span className="store-title">Android app</span>
-              </div>
-            </a>
+            {/* No direct Android download: Google suspended the project over the public APK link (Nov 2026).
+                Add a Google Play button here once the app is listed. */}
           </div>
         </div>
       </div>

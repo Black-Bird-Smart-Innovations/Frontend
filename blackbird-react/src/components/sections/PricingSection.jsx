@@ -59,7 +59,7 @@ export default function PricingSection() {
                 <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
                 <path d="M6 10L9 13L14 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span>24/7 Emergency Support Line</span>
+              <span>Push and text alerts to your Care Team</span>
             </div>
             <div className="pricing-feature">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">

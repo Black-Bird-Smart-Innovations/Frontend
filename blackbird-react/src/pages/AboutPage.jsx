@@ -64,7 +64,7 @@ export default function AboutPage() {
             <div className="value-card">
               <div className="value-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="12" r="6" stroke="currentColor" strokeWidth="2"/><path d="M10 34C10 27.4 14.5 22 20 22C25.5 22 30 27.4 30 34" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="32" cy="18" r="4" stroke="currentColor" strokeWidth="2"/><path d="M35 30C35 26.4 33.2 23.5 31 23" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="8" cy="18" r="4" stroke="currentColor" strokeWidth="2"/><path d="M5 30C5 26.4 6.8 23.5 9 23" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg></div>
               <h3 className="value-title">Community Care</h3>
-              <p className="value-description">Protection works best when it's shared. We connect caregivers, family members, and emergency services into one unified support network.</p>
+              <p className="value-description">Protection works best when it's shared. We bring the wearer, family members and caregivers together in one Care Team, so the right people hear about it when something happens.</p>
             </div>
             <div className="value-card">
               <div className="value-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="8" y="5" width="24" height="30" rx="3" stroke="currentColor" strokeWidth="2"/><circle cx="20" cy="28" r="3" stroke="currentColor" strokeWidth="2"/><path d="M14 10H26M14 15H26M14 20H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg></div>
@@ -74,7 +74,7 @@ export default function AboutPage() {
             <div className="value-card">
               <div className="value-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="15" stroke="currentColor" strokeWidth="2"/><path d="M12 20L18 26L28 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
               <h3 className="value-title">Reliability</h3>
-              <p className="value-description">When it matters most, Black Bird Smart Innovations works. Our 24/7 monitoring and redundant systems ensure help is always just one button press away.</p>
+              <p className="value-description">We say plainly what Black Bird does and doesn't do. Black Bird alerts the people you choose. In a life-threatening emergency, always call 911 yourself.</p>
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ export default function AboutPage() {
                   </div>
                   <div className="spec-item">
                     <div className="spec-icon sos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4V8M12 16V20M4 12H8M16 12H20" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2"/></svg></div>
-                    <div className="spec-content"><h4>24/7 Emergency Support</h4><p>Single-button activation connects to help instantly</p></div>
+                    <div className="spec-content"><h4>One-Touch SOS</h4><p>One press alerts your Care Team and emergency contacts with your location</p></div>
                   </div>
                   <div className="spec-item">
                     <div className="spec-icon health"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 10H16L14 18L10 6L8 10H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
@@ -122,7 +122,7 @@ export default function AboutPage() {
                 <div className="spec-list">
                   <div className="spec-item">
                     <div className="spec-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 15V16C21 18.2091 19.2091 20 17 20H7C4.79086 20 3 18.2091 3 16V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 4V14M12 14L8 10M12 14L16 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
-                    <div className="spec-content"><h4>SMS &amp; Call Alerts</h4><p>Instant notifications to all designated contacts</p></div>
+                    <div className="spec-content"><h4>Push &amp; Text Alerts</h4><p>Alerts go to your Care Team and emergency contacts</p></div>
                   </div>
                   <div className="spec-item">
                     <div className="spec-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4C12 4 15.5 4 17 5.5C18.5 7 18.5 10.5 18.5 10.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M12 8C12 8 13.5 8 14.5 9C15.5 10 15.5 11.5 15.5 11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="12" r="2" fill="currentColor"/><rect x="4" y="10" width="6" height="10" rx="1" stroke="currentColor" strokeWidth="2"/></svg></div>
@@ -134,7 +134,7 @@ export default function AboutPage() {
                   </div>
                   <div className="spec-item">
                     <div className="spec-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/><path d="M8 12H16M12 8V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg></div>
-                    <div className="spec-content"><h4>8+ Languages</h4><p>Spanish, Mandarin, Arabic, Russian, Hebrew, French &amp; more</p></div>
+                    <div className="spec-content"><h4>47 Languages</h4><p>Spanish, Chinese, Arabic, Russian, Hebrew &amp; many more, in the next app update</p></div>
                   </div>
                 </div>
               </div>
@@ -169,7 +169,7 @@ export default function AboutPage() {
             <div className="contact-cta">
               <div className="cta-card">
                 <h3>Ready to get started?</h3>
-                <p>Join thousands of families who trust Black Bird Smart Innovations for peace of mind.</p>
+                <p>Call or email us and we'll help you choose the right setup for your family.</p>
                 <a href="/#pricing" className="btn btn-primary btn-large">
                   <span>View Pricing</span>
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>

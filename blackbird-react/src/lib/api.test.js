@@ -87,3 +87,33 @@ test('does not retry a second unauthorized response', async () => {
   );
   assert.equal(requestCount, 2);
 });
+
+test('lets the session owner reject an old account request without replaying its mutation', async () => {
+  const requests = [];
+  let releaseResponse;
+  globalThis.fetch = async (_url, options) => {
+    requests.push(options);
+    await new Promise((resolve) => { releaseResponse = resolve; });
+    return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
+  };
+
+  let currentToken = 'account-A';
+  const failedTokens = [];
+  setUnauthorizedHandler(async (failedToken) => {
+    failedTokens.push(failedToken);
+    return failedToken === currentToken ? 'refreshed-token' : null;
+  });
+
+  const pendingSave = apiFetch('/user/protective/profile/update', {
+    token: currentToken,
+    method: 'POST',
+    body: { name: 'Account A profile' },
+  });
+  currentToken = 'account-B';
+  releaseResponse();
+
+  await assert.rejects(pendingSave, (error) => error instanceof ApiError && error.status === 401);
+  assert.deepEqual(failedTokens, ['account-A']);
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].headers.Authorization, 'Bearer account-A');
+});

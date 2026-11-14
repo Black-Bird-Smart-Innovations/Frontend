@@ -1,11 +1,78 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../lib/api';
+import { sanitizeProductHtml } from '../lib/productHtml';
+import { addToGuestCart, fetchStoreProduct, loginPath } from '../lib/shop';
+import { findCollectionItem, quoteMailto, SHOP_PHONE } from '../data/collection';
+import WaitlistForm from '../components/shop/WaitlistForm';
 import '../css/shop.css';
+import '../css/shop-public.css';
+
+const PLACEHOLDER_IMAGE = '/images/collection/more.png';
+
+const chevron = <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>;
 
 export default function ProductDetailPage() {
   const { id } = useParams();
+  const item = findCollectionItem(id);
+  return item ? <CollectionItemDetail item={item} /> : <StoreProductDetail id={id} />;
+}
+
+// A Collection item: open to everyone. The button says what really happens.
+function CollectionItemDetail({ item }) {
+  const isQuote = item.action === 'quote';
+  return (
+    <div className="shop-page">
+      <div className="shop-container">
+        <nav className="breadcrumb">
+          <Link to="/products">Shop</Link>
+          {chevron}
+          <span>{item.name}</span>
+        </nav>
+
+        <div className="pd-layout">
+          <div className="pd-gallery">
+            <div className="pd-main-image">
+              <img src={item.image} alt={item.name} />
+            </div>
+          </div>
+
+          <div className="pd-info">
+            <span className="pd-brand">The Black Bird Collection</span>
+            <h1 className="pd-name">{item.name}</h1>
+            <span className={`shop-status-pill${isQuote ? '' : ' soon'}`}>{isQuote ? 'Price on request' : 'Coming soon'}</span>
+            <p className="pd-description">{item.description}</p>
+
+            {item.highlights.length > 0 && (
+              <div className="pd-features">
+                <h3 className="pd-features-title">Highlights</h3>
+                <ul>
+                  {item.highlights.map((line) => <li key={line}>{line}</li>)}
+                </ul>
+              </div>
+            )}
+
+            {isQuote && (
+              <div className="pd-actions">
+                <a className="btn btn-primary btn-large btn-full" href={quoteMailto(item.name)}>Email us for a quote</a>
+                <p className="wl-note">Opens your email app. Or call us at <a href={`tel:+1${SHOP_PHONE.replace(/\D/g, '')}`}>{SHOP_PHONE}</a>.</p>
+              </div>
+            )}
+
+            <div id="waitlist">
+              <WaitlistForm productId={item.id} productName={item.name} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// A product from the online store. Signed-out shoppers can view it (when the server allows) and add it
+// to a cart kept in this browser; sign-in comes only at checkout.
+function StoreProductDetail({ id }) {
   const { user, backendToken, backendLoading, loading: authLoading } = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,46 +81,64 @@ export default function ProductDetailPage() {
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
-  const [cartMessage, setCartMessage] = useState('');
+  const [cartMessage, setCartMessage] = useState(null); // { kind: 'ok' | 'error', text }
+
+  const waitingForAccount = authLoading || (Boolean(user) && !backendToken && backendLoading);
 
   useEffect(() => {
-    if (!backendToken) {
-      if (!backendLoading) setLoading(false);
-      return;
-    }
+    if (waitingForAccount) return undefined;
+    let cancelled = false;
     setLoading(true);
-    apiFetch(`/user/product/detail/${id}`, { token: backendToken })
-      .then(res => {
-        setProduct(res.data);
-        if (res.data?.colors?.length) setSelectedColor(res.data.colors[0]);
+    setError('');
+    fetchStoreProduct(id, backendToken)
+      .then((data) => {
+        if (cancelled) return;
+        setProduct(data);
+        setActiveImage(0);
+        setSelectedColor(data?.colors?.[0] || null);
+        setQuantity(1);
+        setCartMessage(null);
       })
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
-  }, [id, backendToken, backendLoading]);
+      .catch((err) => { if (!cancelled) setError(err.message || 'Could not load this product.'); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [id, backendToken, waitingForAccount]);
 
-  if (authLoading) return null;
-  if (!user) return <Navigate to="/login" replace />;
+  const safeDescription = useMemo(() => sanitizeProductHtml(product?.description), [product?.description]);
+  const images = product?.images || [];
+  const getImageUrl = (img) => img?.image_url || img?.url || '';
 
   const handleAddToCart = async () => {
     setAddingToCart(true);
-    setCartMessage('');
+    setCartMessage(null);
     try {
-      await apiFetch('/user/cart/add', {
-        token: backendToken,
-        method: 'POST',
-        body: { product_id: product.id, quantity, color_id: selectedColor?.id || null },
-      });
-      setCartMessage('Added to cart!');
-      setTimeout(() => setCartMessage(''), 3000);
+      if (backendToken) {
+        const res = await apiFetch('/user/cart/add', {
+          token: backendToken,
+          method: 'POST',
+          body: { product_id: product.id, quantity, color_id: selectedColor?.id || null },
+        });
+        if (res?.status === false) throw new Error(res.message || 'Could not add this item.');
+      } else {
+        const saved = addToGuestCart({
+          product_id: product.id,
+          color_id: selectedColor?.id || null,
+          quantity,
+          name: product.name,
+          price: product.price,
+          image: getImageUrl(images[0]) || PLACEHOLDER_IMAGE,
+          color_name: selectedColor?.name || null,
+          color_hex: selectedColor?.hex_code || null,
+        });
+        if (!saved) throw new Error('This browser blocked saving your cart. Allow site data for this page, or try another browser.');
+      }
+      setCartMessage({ kind: 'ok', text: 'Added to your cart.' });
     } catch (err) {
-      setCartMessage(err.message);
+      setCartMessage({ kind: 'error', text: err.message });
     } finally {
       setAddingToCart(false);
     }
   };
-
-  const images = product?.images || [];
-  const getImageUrl = (img) => img?.image_url || img?.url || '';
 
   const renderStars = (rating) => {
     const stars = [];
@@ -68,16 +153,33 @@ export default function ProductDetailPage() {
     return stars;
   };
 
-  if (loading) return <div className="shop-page"><div className="shop-container"><div className="shop-loading"><div className="spinner" /><p>Loading product...</p></div></div></div>;
-  if (error) return <div className="shop-page"><div className="shop-container"><div className="shop-empty"><p>{error}</p><Link to="/products" className="btn btn-primary">Back to Products</Link></div></div></div>;
-  if (!product) return null;
+  if (loading || waitingForAccount) return <div className="shop-page"><div className="shop-container"><div className="shop-loading"><div className="spinner" /><p>Loading product...</p></div></div></div>;
+
+  if (error || !product) {
+    return (
+      <div className="shop-page">
+        <div className="shop-container shop-container-narrow">
+          <div className="shop-empty">
+            <p>{backendToken ? error || 'This product could not be found.' : "We can't show this product's details here right now."}</p>
+            <div className="shop-empty-actions">
+              <Link to="/products" className="btn btn-primary">Browse the shop</Link>
+              <a href={quoteMailto(`Product ${id}`)} className="btn btn-outline">Email us about it</a>
+            </div>
+            {!backendToken && (
+              <p className="wl-note">Have an account? <Link to={loginPath(`/products/${id}`)}>Sign in</Link> to see it. You don't need an account to browse the shop.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="shop-page">
       <div className="shop-container">
         <nav className="breadcrumb">
-          <Link to="/products">Products</Link>
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+          <Link to="/products">Shop</Link>
+          {chevron}
           <span>{product.name}</span>
         </nav>
 
@@ -146,7 +248,7 @@ export default function ProductDetailPage() {
               <div className="qty-control">
                 <button onClick={() => setQuantity(q => Math.max(1, q - 1))} disabled={quantity <= 1}>-</button>
                 <span>{quantity}</span>
-                <button onClick={() => setQuantity(q => q + 1)}>+</button>
+                <button onClick={() => setQuantity(q => Math.min(99, q + 1))}>+</button>
               </div>
             </div>
 
@@ -155,10 +257,14 @@ export default function ProductDetailPage() {
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 6H3L1 18H19L17 6H14" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><path d="M6 6V4C6 2.34315 7.34315 1 9 1H11C12.6569 1 14 2.34315 14 4V6" stroke="currentColor" strokeWidth="1.5"/></svg>
                 {addingToCart ? 'Adding...' : 'Add to Cart'}
               </button>
+              {!backendToken && <p className="wl-note">No account needed to add items. You'll sign in when you check out.</p>}
             </div>
 
             {cartMessage && (
-              <div className={`pd-cart-msg${cartMessage.includes('Added') ? '' : ' error'}`}>{cartMessage}</div>
+              <div className={`pd-cart-msg${cartMessage.kind === 'ok' ? '' : ' error'}`} role="status">
+                {cartMessage.text}
+                {cartMessage.kind === 'ok' && <> <Link to="/cart">View cart</Link></>}
+              </div>
             )}
 
             {product.return_period && (
@@ -184,7 +290,7 @@ export default function ProductDetailPage() {
         {product.description && (
           <div className="pd-full-desc">
             <h2>Description</h2>
-            <div dangerouslySetInnerHTML={{ __html: product.description }} />
+            <div dangerouslySetInnerHTML={{ __html: safeDescription }} />
           </div>
         )}
 
@@ -211,7 +317,7 @@ export default function ProductDetailPage() {
               {product.similar_products.map(p => (
                 <Link to={`/products/${p.id}`} key={p.id} className="product-card-shop">
                   <div className="product-card-image">
-                    <img src={p.images?.[0]?.image_url || '/images/placeholder.png'} alt={p.name} loading="lazy" />
+                    <img src={p.images?.[0]?.image_url || PLACEHOLDER_IMAGE} alt={p.name} loading="lazy" />
                   </div>
                   <div className="product-card-body">
                     <h3 className="product-card-name">{p.name}</h3>

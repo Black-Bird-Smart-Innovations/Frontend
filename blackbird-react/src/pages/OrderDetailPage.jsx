@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../lib/api';
+import { loginPath } from '../lib/shop';
 import '../css/shop.css';
 
 const STATUS_MAP = {
@@ -13,6 +14,7 @@ const STATUS_MAP = {
 };
 
 export default function OrderDetailPage() {
+  const { pathname } = useLocation();
   const { id } = useParams();
   const { user, backendToken, backendLoading, loading: authLoading } = useAuth();
   const [order, setOrder] = useState(null);
@@ -34,7 +36,7 @@ export default function OrderDetailPage() {
   }, [id, backendToken, backendLoading]);
 
   if (authLoading) return null;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to={loginPath(pathname)} replace />;
 
   const handleAction = async (action) => {
     setActionLoading(action);

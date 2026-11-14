@@ -194,6 +194,11 @@ button {
     padding: 0 var(--space-lg);
 }
 
+/* Keep in-page destinations clear of the fixed navigation bar. */
+section[id], #tutorial {
+    scroll-margin-top: 5rem;
+}
+
 /* === Navigation === */
 .nav {
     position: fixed;

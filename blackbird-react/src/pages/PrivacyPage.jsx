@@ -57,7 +57,7 @@ export default function PrivacyPage() {
             <h3>Mobile App Permissions</h3>
             <p>Our mobile application may request access to:</p>
             <ul>
-              <li><strong>Geolocation:</strong> For real-time tracking and emergency services</li>
+              <li><strong>Geolocation:</strong> For location sharing and for the location sent with SOS and fall alerts</li>
               <li><strong>Bluetooth:</strong> To connect with your Black Bird wristband</li>
               <li><strong>Camera:</strong> For QR code scanning and profile photos</li>
               <li><strong>Contacts:</strong> To set up emergency contact lists</li>
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
             <ul>
               <li>Google Maps Platform APIs (for location services)</li>
               <li>Payment processors (for secure transactions)</li>
-              <li>Emergency services (when SOS is activated)</li>
+              <li>Your Care Team and emergency contacts (when an SOS or fall alert is sent)</li>
               <li>Healthcare providers (with your consent)</li>
             </ul>
             <h3>Business Transfers</h3>

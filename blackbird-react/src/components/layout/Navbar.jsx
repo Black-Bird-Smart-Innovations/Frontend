@@ -92,20 +92,19 @@ export default function Navbar() {
         </div>
 
         <div className="nav-actions">
-          <Link to="/products" className="nav-link search-link" title="Browse Products">
+          <Link to="/products" className="nav-link search-link" title="Shop" aria-label="Shop">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="2"/>
               <path d="M13.5 13.5L17 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </Link>
-          {user && (
-            <Link to="/cart" className="nav-link search-link" title="Cart">
+          {/* The cart works signed out too; only checkout asks for sign-in. */}
+          <Link to="/cart" className="nav-link search-link" title="Cart" aria-label="Cart">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path d="M6 6H3L1 18H19L17 6H14" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
                 <path d="M6 6V4C6 2.34315 7.34315 1 9 1H11C12.6569 1 14 2.34315 14 4V6" stroke="currentColor" strokeWidth="1.5"/>
               </svg>
-            </Link>
-          )}
+          </Link>
           <ThemeToggle />
           {user ? (
             <div className="user-menu" ref={menuRef}>
